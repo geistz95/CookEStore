@@ -20,4 +20,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
         };
     }
 
+    Iterable<Bill> unpaidBills(Long customer_id);
+
+
 }

@@ -20,6 +20,10 @@ public class Customer {
     @Column
     private String address;
 
+    @OneToMany
+    @JoinColumn
+    private List<Order> orders;
+
     public Customer(Long id, String fName, String lName) {
         this.id = id;
         this.fName = fName;

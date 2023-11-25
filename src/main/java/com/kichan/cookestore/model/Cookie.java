@@ -1,5 +1,7 @@
 package com.kichan.cookestore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,22 +10,27 @@ public class Cookie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cookie_id;
 
-    @Column(name="cookie_name")
+    @Column(name = "cookie_name")
     private String name;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
+    @Column
+    private Double price;
+
     @ManyToOne
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+    @JsonIgnore
+    @JoinColumn(name = "order_id")
+    private Order order;
 
 
-    public Cookie(Long cookie_id, String name, String description, Bill bill) {
+    public Cookie(Long cookie_id, String name, String description, Double price, Order order) {
         this.cookie_id = cookie_id;
         this.name = name;
         this.description = description;
-        this.bill = bill;
+        this.price = price;
+        this.order = order;
     }
 
     public Cookie() {
@@ -53,11 +60,19 @@ public class Cookie {
         this.description = description;
     }
 
-    public Bill getBill() {
-        return bill;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

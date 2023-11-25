@@ -1,6 +1,7 @@
 package com.kichan.cookestore.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Order {
@@ -17,10 +18,14 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Order(Long id, Long customerName, Customer customer) {
+    @OneToMany
+    private List<Cookie> cookies;
+
+    public Order(Long id, Long customerName, Customer customer, List<Cookie> cookies) {
         this.id = id;
         this.customerName = customerName;
         this.customer = customer;
+        this.cookies = cookies;
     }
 
     public Order() {
@@ -48,5 +53,13 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(List<Cookie> cookies) {
+        this.cookies = cookies;
     }
 }
