@@ -27,6 +27,9 @@ public class BillService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private TransactionalService transactionalService;
+
     private static final Logger logger = LoggerFactory.getLogger(BillService.class);
     private Bill verifyID(Long billId){
         Optional<Bill> b = billRepository.findById(billId);
@@ -58,9 +61,14 @@ public class BillService {
 
     public void createBill(Long orderId, Bill bill){
         logger.info("Order is being verified");
-        verifyOrder(orderId);
+        Order a = verifyOrder(orderId);
         logger.info("Order verification successful");
+        transactionalService.calculateOrderTotalToBill(a,bill);
         billRepository.save(bill);
+    }
+
+    public void createBill(Order order, Bill bill){
+
     }
 
     public void editBill(Long billId, Bill bill){

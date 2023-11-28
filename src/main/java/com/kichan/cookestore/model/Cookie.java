@@ -1,6 +1,7 @@
 package com.kichan.cookestore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -19,18 +20,29 @@ public class Cookie {
     @Column
     private Double price;
 
+    @Column
+    private Integer quantity;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "order_id")
     private Order order;
 
-
-    public Cookie(Long cookie_id, String name, String description, Double price, Order order) {
+    public Cookie(Long cookie_id, String name, String description, Double price, Integer quantity, Order order) {
         this.cookie_id = cookie_id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.quantity = quantity;
         this.order = order;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Cookie() {

@@ -21,14 +21,10 @@ public class Customer {
     private String address;
 
     @OneToMany
-    @JoinColumn
+    @JoinColumn(name = "customer_id")
     private List<Order> orders;
 
-    public Customer(Long id, String fName, String lName) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-    }
+
 
     public Customer() {
     }

@@ -1,7 +1,7 @@
 package com.kichan.cookestore.enums;
 
 public enum PaymentStatus {
-    PROCESSING("PROCESSING"),ACCEPTED("ACCEPTED"),DECLINED("DECLINED");
+    PROCESSING("PROCESSING"),ACCEPTED("ACCEPTED"),DECLINED("DECLINED"),ORDER_CHANGED("ORDER CHANGED"),CANCELLED("CANCELLED");
     private final String status;
 
     PaymentStatus(String status) {

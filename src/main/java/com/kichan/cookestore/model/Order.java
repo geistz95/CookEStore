@@ -1,5 +1,8 @@
 package com.kichan.cookestore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,13 +22,21 @@ public class Order {
     private Customer customer;
 
     @OneToMany
+    @JoinColumn(name = "order_id")
+    @JsonIgnoreProperties("order")
     private List<Cookie> cookies;
 
-    public Order(Long id, Long customerName, Customer customer, List<Cookie> cookies) {
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name="bill_id")
+    private Bill bill;
+
+    public Order(Long id, Long customerName, Customer customer, List<Cookie> cookies, Bill bill) {
         this.id = id;
         this.customerName = customerName;
         this.customer = customer;
         this.cookies = cookies;
+        this.bill = bill;
     }
 
     public Order() {
@@ -61,5 +72,13 @@ public class Order {
 
     public void setCookies(List<Cookie> cookies) {
         this.cookies = cookies;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 }
