@@ -51,9 +51,12 @@ public class OrderService {
         order.setStatus(OrderStatus.PENDING);
 
         // Create and save the Bill entity separately
+
+        Customer customer = customerService.getById(order.getCustomerID());
+        order.setCustomerName(customer.getfName() + " " + customer.getlName());
+        order.setCustomer(customer);
         Bill bill = transactionalService.calculateOrderTotalToBill(order);
         billRepository.save(bill);
-
         // Associate the created bill with the order
         logger.info("Attempting to save");
         order.setBill(bill);
@@ -62,9 +65,7 @@ public class OrderService {
         // Now, save the order
 
 
-        Customer customer = customerService.getById(order.getCustomerID());
-        order.setCustomerName(customer.getfName() + " " + customer.getlName());
-        order.setCustomer(customer);
+
         orderRepository.save(order);
         logger.info("order saved!");
         return order;

@@ -19,8 +19,8 @@ import javax.persistence.criteria.Predicate;
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
     @Query(value = "SELECT b.* FROM bill b " +
-            "JOIN order o ON b.order_id = o.order_id " +
-            "JOIN customer c ON o.customer_id = c.customer_id " +
+            "JOIN cookieorders o on b.bill_id = o.bill_id " +
+            "JOIN customer c on o.customer_id = c.customer_id " +
             "WHERE c.customer_id = ?1 AND b.status = 'PENDING'", nativeQuery = true)
     Iterable<Bill> unpaidBills(Long customer_id);
 

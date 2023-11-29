@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "CookieOrders")
+@Table(name = "cookieorders")
 public class Order {
 
     @Id

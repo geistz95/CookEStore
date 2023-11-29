@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -92,5 +93,9 @@ public class BillService {
         Bill bill = verifyID(billId);
         bill.setStatus(PaymentStatus.COMPLETED);
         return bill;
+    }
+
+    public List<Bill> getAllBills(){
+        return billRepository.findAll();
     }
 }

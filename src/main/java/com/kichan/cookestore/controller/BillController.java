@@ -28,16 +28,21 @@ public class BillController {
     }
 
     @GetMapping("/customer/{customer_id}/bills")
-    public ResponseEntity<?> getAllUnpaidBillsByCustomerID(@PathVariable Long customerID){
-        logger.info("Getting all customers for customer id : "+customerID);
+    public ResponseEntity<?> getAllUnpaidBillsByCustomerID(@PathVariable Long customer_id){
+        logger.info("Getting all customers for customer id : "+customer_id);
 
         //return custom response
-        return getAllBilLsByCustomerIDResponse(HttpStatus.OK,billService.unpaidBills(customerID));
+        return getAllBilLsByCustomerIDResponse(HttpStatus.OK,billService.unpaidBills(customer_id));
     }
 
     @PutMapping("/bills/{bill_id}")
     public ResponseEntity<?> payBill(@PathVariable Long bill_id){
         return new ResponseEntity<>(billService.payBill(bill_id),HttpStatus.OK);
+    }
+
+    @GetMapping("/bills")
+    public ResponseEntity<?> getAllBills(){
+        return new ResponseEntity<>(billService.getAllBills(),HttpStatus.OK);
     }
 
 }
