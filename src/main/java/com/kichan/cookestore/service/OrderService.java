@@ -3,8 +3,10 @@ package com.kichan.cookestore.service;
 import com.kichan.cookestore.enums.OrderStatus;
 import com.kichan.cookestore.enums.PaymentStatus;
 import com.kichan.cookestore.exceptions.OrderNotFoundException;
+import com.kichan.cookestore.model.Bill;
 import com.kichan.cookestore.model.Customer;
 import com.kichan.cookestore.model.Order;
+import com.kichan.cookestore.repository.BillRepository;
 import com.kichan.cookestore.repository.CustomerRepository;
 import com.kichan.cookestore.repository.OrderRepository;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ public class OrderService {
     private TransactionalService transactionalService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private BillRepository billRepository;
 
     @Autowired
     private BillService billService;
@@ -42,16 +46,27 @@ public class OrderService {
         return o.get();
     }
 
-    public Order createOrder(Order order){
+    public Order createOrder(Order order) {
         logger.info("Adding new order to order repository");
         order.setStatus(OrderStatus.PENDING);
 
-        order.setBill(transactionalService.calculateOrderTotalToBill(order));
+        // Create and save the Bill entity separately
+        Bill bill = transactionalService.calculateOrderTotalToBill(order);
+        billRepository.save(bill);
 
-        orderRepository.save(order);
+        // Associate the created bill with the order
+        logger.info("Attempting to save");
+        order.setBill(bill);
+        logger.info("bill has been saved!");
+
+        // Now, save the order
+
+
         Customer customer = customerService.getById(order.getCustomerID());
-        order.setCustomerName(customer.getfName()+" "+customer.getlName());
+        order.setCustomerName(customer.getfName() + " " + customer.getlName());
         order.setCustomer(customer);
+        orderRepository.save(order);
+        logger.info("order saved!");
         return order;
     }
 

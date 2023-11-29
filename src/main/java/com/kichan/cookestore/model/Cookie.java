@@ -23,18 +23,13 @@ public class Cookie {
     @Column
     private Integer quantity;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "order_id")
-    private Order order;
 
-    public Cookie(Long cookie_id, String name, String description, Double price, Integer quantity, Order order) {
+    public Cookie(Long cookie_id, String name, String description, Double price, Integer quantity) {
         this.cookie_id = cookie_id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
-        this.order = order;
     }
 
     public Integer getQuantity() {
@@ -80,11 +75,5 @@ public class Cookie {
         this.price = price;
     }
 
-    public Order getOrder() {
-        return order;
-    }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

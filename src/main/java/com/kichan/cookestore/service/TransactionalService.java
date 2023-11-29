@@ -1,5 +1,6 @@
 package com.kichan.cookestore.service;
 
+import com.kichan.cookestore.controller.CookieController;
 import com.kichan.cookestore.enums.PaymentStatus;
 import com.kichan.cookestore.model.Bill;
 import com.kichan.cookestore.model.Cookie;
@@ -7,6 +8,8 @@ import com.kichan.cookestore.model.Order;
 import com.kichan.cookestore.repository.BillRepository;
 import com.kichan.cookestore.repository.CookieRepository;
 import com.kichan.cookestore.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +24,24 @@ public class TransactionalService {
     @Autowired
     private OrderRepository orderRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(CookieController.class);
 
     @Transactional
     public Bill calculateOrderTotalToBill(Order order){
         List<Cookie> cookieList = order.getCookies();
         Bill bill = new Bill();
         bill.setStatus(PaymentStatus.PENDING);
-        bill.setOrder(order);
         bill.setCustomer_name(order.getCustomerName());
+
         double totalPrice = 0.0;
-        for(Cookie s  : cookieList){
-            totalPrice+=s.getPrice();
+        for(Cookie cookie : cookieList){
+            totalPrice += cookie.getPrice() * cookie.getQuantity(); // Consider quantity in the calculation
         }
-        billRepository.save(bill);
-        order.setBill(bill);
+        bill.setTotal(totalPrice); // Set the total price to the bill
+        logger.info("Attempting to set bills");
+        logger.info("Bill saved!");
+        billRepository.save(bill); // Save the bill after associating it with the order
+        logger.info("Where's the error?!");
         return bill;
     }
 
@@ -43,7 +50,6 @@ public class TransactionalService {
         oldOrder.getBill().setStatus(PaymentStatus.ORDER_CHANGED);
         Bill bill = new Bill();
         bill.setStatus(PaymentStatus.PENDING);
-        bill.setOrder(oldOrder);
         bill.setCustomer_name(oldOrder.getCustomerName());
         double totalPrice = 0.0;
         for(Cookie s  : cookieList){

@@ -1,5 +1,6 @@
 package com.kichan.cookestore.controller;
 
+import com.kichan.cookestore.exceptions.CookieNotFoundException;
 import com.kichan.cookestore.model.Order;
 import com.kichan.cookestore.repository.OrderRepository;
 import com.kichan.cookestore.service.BillService;
@@ -27,11 +28,15 @@ public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(CookieController.class);
 
     @PostMapping("/orders")
-    public ResponseEntity<?> createOrder(Order order){
+    public ResponseEntity<?> createOrder(@RequestBody Order order){
         HttpHeaders responseHeader = new HttpHeaders();
         logger.info("Creating new cookie URI");
         URI newPollUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();
-        return new ResponseEntity<>(orderService.createOrder(order),HttpStatus.OK);
+       // return new ResponseEntity<>(order,HttpStatus.OK);
+                if(order.getCookies()!=null){ return new ResponseEntity<>(orderService.createOrder(order),HttpStatus.OK);}
+        else{
+            throw new CookieNotFoundException("No Cookies here");
+        }
     }
 
 

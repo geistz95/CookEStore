@@ -3,11 +3,13 @@ package com.kichan.cookestore.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kichan.cookestore.enums.OrderStatus;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "CookieOrders")
 public class Order {
 
     @Id
@@ -24,6 +26,7 @@ public class Order {
     private OrderStatus status;
 
     @Column(name = "getCustomer")
+    @NotNull
     private Long customerID;
 
     @ManyToOne
@@ -32,13 +35,13 @@ public class Order {
     private Customer customer;
 
     @OneToMany
-    @JoinColumn(name="cookie_id")
+    @JoinColumn(name="order_id")
     @JsonIgnoreProperties("order")
     private List<Cookie> cookies;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name="bill_id")
+    @JoinColumn(name = "bill_id")
     private Bill bill;
 
 

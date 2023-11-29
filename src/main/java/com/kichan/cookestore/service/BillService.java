@@ -66,7 +66,6 @@ public class BillService {
         logger.info("Bill is being verified");
         Bill oldBill = verifyID(billId);
         logger.info("Bill verification has been successful");
-        oldBill.setOrder(bill.getOrder());
         oldBill.setStatus(bill.getStatus());
         oldBill.setTotal(bill.getTotal());
         oldBill.setCustomer_name(bill.getCustomer_name());

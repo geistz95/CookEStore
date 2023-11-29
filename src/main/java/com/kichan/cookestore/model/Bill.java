@@ -21,17 +21,11 @@ public class Bill {
     @Column
     private String customer_name;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
-
-    public Bill(Long id, Double total, PaymentStatus status, String customer_name, Order order) {
+    public Bill(Long id, Double total, PaymentStatus status, String customer_name) {
         this.id = id;
         this.total = total;
         this.status = status;
         this.customer_name = customer_name;
-        this.order = order;
     }
 
     public Bill() {
@@ -69,11 +63,4 @@ public class Bill {
         this.customer_name = customer_name;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }
