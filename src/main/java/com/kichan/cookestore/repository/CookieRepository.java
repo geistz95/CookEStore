@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Repository
@@ -19,34 +20,11 @@ public interface CookieRepository extends JpaRepository<Cookie, Long> {
      * @return List of Cookies and its sales figures
      */
 
-    @Query(value = "select * from cookie",
-    countQuery = "Select count(*) from cookie group by cookie_name",
-    nativeQuery = true)
-    List<cookieSalesHelper> findCookieSales();
+    @Query(value = "SELECT c.name, COUNT(co) " +
+            "FROM Order o " +
+            "JOIN o.cookies co " +
+            "JOIN co.cookie c " +
+            "GROUP BY c.cookie_id")
+    List<Object[]> findCookieSales();
 
-    public class cookieSalesHelper{
-        private String cookie_name;
-        private Integer amount;
-
-        public cookieSalesHelper(String cookie_name, Integer amount){
-            this.cookie_name=cookie_name;
-            this.amount=amount;
-        }
-
-        public String getCookie_name() {
-            return cookie_name;
-        }
-
-        public void setCookie_name(String cookie_name) {
-            this.cookie_name = cookie_name;
-        }
-
-        public Integer getAmount() {
-            return amount;
-        }
-
-        public void setAmount(Integer amount) {
-            this.amount = amount;
-        }
-    }
 }

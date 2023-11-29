@@ -61,4 +61,8 @@ public class CookieController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/cookies/sales")
+    public ResponseEntity<?> cookieSales(){
+        return new ResponseEntity<>(cookieService.countCookieSales(),HttpStatus.OK);
+    }
 }
