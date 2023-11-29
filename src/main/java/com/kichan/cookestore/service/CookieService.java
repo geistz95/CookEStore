@@ -38,10 +38,11 @@ public class CookieService {
         }
     }
 
-    public void createCookie(Cookie cookie){
+    public Cookie createCookie(Cookie cookie){
         logger.info("Creating the cookie"+ cookie.getName());
         verifyQuantity(cookie.getQuantity());
         cookieRepository.save(cookie);
+        return cookie;
     }
 
     public Cookie getCookieById(Long id){

@@ -6,8 +6,10 @@ import com.kichan.cookestore.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,22 +28,32 @@ public class CustomerService {
         return customer.get();
     }
 
-    public void createCustomer(Customer customer){
+    public Customer createCustomer(Customer customer){
         logger.info("Saving customer to repository");
         customerRepository.save(customer);
+        return customer;
     }
 
-    public void editCustomer(Long customer_id,Customer customer){
+    public Customer editCustomer(Long customer_id, Customer customer){
         Customer editCustomer = verifyCustomer(customer_id);
         editCustomer.setAddress(customer.getAddress());
         editCustomer.setfName(customer.getfName());
         editCustomer.setlName(customer.getlName());
         logger.info("Editing customer successful");
         customerRepository.save(editCustomer);
+        return editCustomer;
     }
 
     public void deleteCustomer(Long customer_id){
         logger.info("Deleting customer id "+ customer_id);
         customerRepository.delete(verifyCustomer(customer_id));
+    }
+
+    public Customer getById(Long customerId) {
+        return verifyCustomer(customerId);
+    }
+
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
     }
 }

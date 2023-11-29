@@ -2,6 +2,7 @@ package com.kichan.cookestore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kichan.cookestore.enums.OrderStatus;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,7 +16,12 @@ public class Order {
     private Long id;
 
     @Column(name="customer_name")
-    private Long customerName;
+    private String customerName;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="order_status")
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -31,15 +37,18 @@ public class Order {
     @JoinColumn(name="bill_id")
     private Bill bill;
 
-    public Order(Long id, Long customerName, Customer customer, List<Cookie> cookies, Bill bill) {
+
+
+    public Order() {
+    }
+
+    public Order(Long id, String customerName, OrderStatus status, Customer customer, List<Cookie> cookies, Bill bill) {
         this.id = id;
         this.customerName = customerName;
+        this.status = status;
         this.customer = customer;
         this.cookies = cookies;
         this.bill = bill;
-    }
-
-    public Order() {
     }
 
     public Long getId() {
@@ -50,11 +59,11 @@ public class Order {
         this.id = id;
     }
 
-    public Long getCustomerName() {
+    public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(Long customerName) {
+    public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
 
@@ -80,5 +89,13 @@ public class Order {
 
     public void setBill(Bill bill) {
         this.bill = bill;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

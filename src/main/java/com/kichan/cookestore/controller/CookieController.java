@@ -2,11 +2,13 @@ package com.kichan.cookestore.controller;
 
 import com.kichan.cookestore.model.Cookie;
 import com.kichan.cookestore.repository.CookieRepository;
+import static com.kichan.cookestore.response.CookieResponse.*;
 import com.kichan.cookestore.service.CookieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +21,7 @@ public class CookieController {
     @Autowired
     private CookieService cookieService;
 
+
     private static final Logger logger = LoggerFactory.getLogger(CookieController.class);
 
     @PostMapping("/cookies")
@@ -30,22 +33,27 @@ public class CookieController {
         responseHeader.setLocation(newPollUri);
 
         logger.info("Post Request received : creating cookie");
-        cookieService.createCookie(cookie);
-        logger.info("Returning successful post request");
+
         //Return custom response
+        return getCookieAllResponse( HttpStatus.CREATED,cookieService.createCookie(cookie));
     }
 
     @GetMapping("/cookies")
     public ResponseEntity<?> getAllCookies(){
-        cookieService.getAllCookies();
         //return custom response
-
+        return getCookieAllResponse(HttpStatus.OK,cookieService.getAllCookies());
     }
 
     @GetMapping("/cookies/{cookie_id}")
-    public ResponseEntity getCookieById(@PathVariable Long cookie_id){
-        cookieService.getCookieById(cookie_id);
-        //return custome response
+    public ResponseEntity<?> getCookieById(@PathVariable Long cookie_id){
+        //return customer response
+        return getACookieResponse(HttpStatus.OK,cookieService.getCookieById(cookie_id));
+    }
+
+    @DeleteMapping("/cookies/{cookie_id}")
+    public ResponseEntity<?> deleteCookieByID(@PathVariable Long cookie_id){
+        cookieService.deleteCookieByID(cookie_id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

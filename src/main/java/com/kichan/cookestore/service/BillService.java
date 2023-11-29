@@ -1,5 +1,6 @@
 package com.kichan.cookestore.service;
 
+import com.kichan.cookestore.enums.PaymentStatus;
 import com.kichan.cookestore.exceptions.BillNotFoundException;
 import com.kichan.cookestore.exceptions.OrderNotFoundException;
 import com.kichan.cookestore.model.Bill;
@@ -57,19 +58,9 @@ public class BillService {
         return o.get();
     }
 
-
-
-    public void createBill(Long orderId, Bill bill){
-        logger.info("Order is being verified");
-        Order a = verifyOrder(orderId);
-        logger.info("Order verification successful");
-        transactionalService.calculateOrderTotalToBill(a,bill);
-        billRepository.save(bill);
-    }
-
-    public void createBill(Order order, Bill bill){
-
-    }
+    /*
+    Bills are automatically created when orders are placed
+     */
 
     public void editBill(Long billId, Bill bill){
         logger.info("Bill is being verified");
@@ -96,5 +87,11 @@ public class BillService {
         logger.info("Verifying and getting the bills that are unpaid for customer id  " + customerID);
         verifyCustomer(customerID);
         return billRepository.unpaidBills(customerID);
+    }
+
+    public Bill payBill(Long billId) {
+        Bill bill = verifyID(billId);
+        bill.setStatus(PaymentStatus.COMPLETED);
+        return bill;
     }
 }

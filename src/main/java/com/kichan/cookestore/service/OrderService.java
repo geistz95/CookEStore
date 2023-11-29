@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,11 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired TransactionalService transactionalService;
+    @Autowired
+    private TransactionalService transactionalService;
+
+    @Autowired
+    private BillService billService;
 
     private static final Logger logger = LoggerFactory.getLogger(BillService.class);
 
@@ -33,9 +38,11 @@ public class OrderService {
         return o.get();
     }
 
-    public void createOrder(Order order){
+    public Order createOrder(Order order){
         logger.info("Adding new order to order repository");
         orderRepository.save(order);
+        transactionalService.calculateOrderTotalToBill(order);
+        return order;
     }
 
     public Order getOrder(Long id){
@@ -46,14 +53,18 @@ public class OrderService {
     public void editOrder(Long id, Order order){
         Order oldOrder= verifyOrder(id);
         //Logic here is that only the list of cookies is being changed
-        logger.info("Editting info ");
+        logger.info("Editting order info for id "+id);
         oldOrder.setCookies(order.getCookies());
+        transactionalService.calculateNewBill(oldOrder);
 
     }
 
     public void cancelOrder(Long id){
         Order orderToCancel = verifyOrder(id);
         orderToCancel.getBill().setStatus(PaymentStatus.CANCELLED);
+    }
+    public List<Order> getAllOrders(){
+        return orderRepository.findAll();
     }
 
 
