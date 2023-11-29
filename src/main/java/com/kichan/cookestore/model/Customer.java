@@ -20,9 +20,6 @@ public class Customer {
     @Column
     private String address;
 
-    @OneToMany
-    @JoinColumn(name = "customer_id")
-    private List<Order> orders;
 
 
 

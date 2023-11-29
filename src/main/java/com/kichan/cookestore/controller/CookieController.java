@@ -50,6 +50,11 @@ public class CookieController {
         return getACookieResponse(HttpStatus.OK,cookieService.getCookieById(cookie_id));
     }
 
+    @PutMapping("/cookies/{cookie_id}")
+    public ResponseEntity<?> editCookieByID(@PathVariable Long cookie_id, @RequestBody Cookie cookie){
+        return new ResponseEntity<>(cookieService.editCookieInfo(cookie_id,cookie),HttpStatus.OK );
+    }
+
     @DeleteMapping("/cookies/{cookie_id}")
     public ResponseEntity<?> deleteCookieByID(@PathVariable Long cookie_id){
         cookieService.deleteCookieByID(cookie_id);

@@ -1,7 +1,9 @@
 package com.kichan.cookestore.service;
 
+import com.kichan.cookestore.enums.OrderStatus;
 import com.kichan.cookestore.enums.PaymentStatus;
 import com.kichan.cookestore.exceptions.OrderNotFoundException;
+import com.kichan.cookestore.model.Customer;
 import com.kichan.cookestore.model.Order;
 import com.kichan.cookestore.repository.CustomerRepository;
 import com.kichan.cookestore.repository.OrderRepository;
@@ -23,6 +25,8 @@ public class OrderService {
 
     @Autowired
     private TransactionalService transactionalService;
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private BillService billService;
@@ -40,8 +44,14 @@ public class OrderService {
 
     public Order createOrder(Order order){
         logger.info("Adding new order to order repository");
+        order.setStatus(OrderStatus.PENDING);
+
+        order.setBill(transactionalService.calculateOrderTotalToBill(order));
+
         orderRepository.save(order);
-        transactionalService.calculateOrderTotalToBill(order);
+        Customer customer = customerService.getById(order.getCustomerID());
+        order.setCustomerName(customer.getfName()+" "+customer.getlName());
+        order.setCustomer(customer);
         return order;
     }
 

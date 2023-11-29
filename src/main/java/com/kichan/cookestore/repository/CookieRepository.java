@@ -4,12 +4,14 @@ package com.kichan.cookestore.repository;
 import com.kichan.cookestore.model.Cookie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 
 @Repository
+@EnableJpaRepositories
 public interface CookieRepository extends JpaRepository<Cookie, Long> {
 
     /**

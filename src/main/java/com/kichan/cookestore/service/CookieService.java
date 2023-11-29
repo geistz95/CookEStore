@@ -51,7 +51,7 @@ public class CookieService {
         return cookie;
     }
 
-    public void editCookieInfo(Long id,Cookie cookie){
+    public Cookie editCookieInfo(Long id,Cookie cookie){
         Cookie oldCookie = verifyCookieId(id);
         logger.info("Editing cookie details");
         oldCookie.setDescription(cookie.getDescription());
@@ -61,6 +61,7 @@ public class CookieService {
         oldCookie.setQuantity(cookie.getQuantity());
         logger.info("Saving edits");
         cookieRepository.save(oldCookie);
+        return oldCookie;
     }
 
     public void deleteCookieByID(Long id){

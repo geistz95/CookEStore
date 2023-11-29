@@ -31,7 +31,7 @@ public class TransactionalService {
         bill.setCustomer_name(order.getCustomerName());
         double totalPrice = 0.0;
         for(Cookie s  : cookieList){
-            totalPrice+=s.getPrice()*s.getQuantity();
+            totalPrice+=s.getPrice();
         }
         billRepository.save(bill);
         order.setBill(bill);

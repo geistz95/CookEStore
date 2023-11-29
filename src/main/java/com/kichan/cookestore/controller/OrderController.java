@@ -31,8 +31,7 @@ public class OrderController {
         HttpHeaders responseHeader = new HttpHeaders();
         logger.info("Creating new cookie URI");
         URI newPollUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();
-
-        return createOrderResponse(HttpStatus.CREATED, order, billService.getById(orderService.getOrder(order.getId()).getBill().getId()));
+        return new ResponseEntity<>(orderService.createOrder(order),HttpStatus.OK);
     }
 
 

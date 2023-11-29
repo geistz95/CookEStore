@@ -23,12 +23,16 @@ public class Order {
     @Column(name="order_status")
     private OrderStatus status;
 
+    @Column(name = "getCustomer")
+    private Long customerID;
+
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name="cookie_id")
     @JsonIgnoreProperties("order")
     private List<Cookie> cookies;
 
@@ -42,10 +46,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, String customerName, OrderStatus status, Customer customer, List<Cookie> cookies, Bill bill) {
+    public Order(Long id, String customerName, OrderStatus status, Long customerID, Customer customer, List<Cookie> cookies, Bill bill) {
         this.id = id;
         this.customerName = customerName;
         this.status = status;
+        this.customerID = customerID;
         this.customer = customer;
         this.cookies = cookies;
         this.bill = bill;
@@ -97,5 +102,13 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Long getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(Long customerID) {
+        this.customerID = customerID;
     }
 }
